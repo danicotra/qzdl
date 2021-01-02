@@ -505,7 +505,7 @@ QString ZDLMainWindow::getArgumentsString(bool native_sep)
 			}
 
 			if (tGameType == "2"){
-				args.append(" -deathmath");
+				args.append(" -deathmatch");
 			} else if (tGameType == "3"){
 				args.append(" -altdeath");
 			}
@@ -736,7 +736,7 @@ QStringList ZDLMainWindow::getArgumentsList()
 			}
 
 			if (tGameType == "2"){
-				args<<"-deathmath";
+				args<<"-deathmatch";
 			} else if (tGameType == "3"){
 				args<<"-altdeath";
 			}
