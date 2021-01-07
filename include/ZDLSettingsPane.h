@@ -36,6 +36,7 @@ protected slots:
 protected:
 	QStringList getFilesMaps();
 	QComboBox *diffList;
+	QComboBox *monstersList;
 	QComboBox *sourceList;
 	QListWidget *IWADList;
 	QComboBox *warpCombo;
