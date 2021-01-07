@@ -61,6 +61,9 @@ ZDLSettingsPane::ZDLSettingsPane(QWidget *parent):ZDLWidget(parent){
 	QVBoxLayout *skillBox = new QVBoxLayout();
 	box2->addLayout(skillBox);
 
+	QVBoxLayout *monstersBox = new QVBoxLayout();
+	box2->addLayout(monstersBox);
+
 	warpCombo = new VerboseComboBox(this);
 	connect(warpCombo, SIGNAL(activated(int)), this, SLOT(currentRowChanged(int)));
 	connect(warpCombo, SIGNAL(onPopup()), this, SLOT(VerbosePopup()));
@@ -82,9 +85,18 @@ ZDLSettingsPane::ZDLSettingsPane(QWidget *parent):ZDLWidget(parent){
 	diffList->addItem("Medium");
 	diffList->addItem("Hard");
 	diffList->addItem("V. Hard");
-	diffList->addItem("No monsters");
 	skillBox->addWidget(new QLabel("Skill",this));
 	skillBox->addWidget(diffList);
+
+	monstersList = new QComboBox(this);
+	monstersList->addItem("(Default)");
+	monstersList->addItem("No");
+	monstersList->addItem("Fast");
+	monstersList->addItem("Respawn");
+	monstersList->addItem("Fast & Respawn");
+	monstersBox->addWidget(new QLabel("Monsters",this));
+	monstersBox->addWidget(monstersList);
+
 	LOGDATAO() << "Done" << endl;
 }
 
@@ -261,6 +273,13 @@ void ZDLSettingsPane::reloadMapList(){
 void ZDLSettingsPane::rebuild(){
 	LOGDATAO() << "Saving config" << endl;
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
+
+	if(monstersList->currentIndex() > 0){
+		zconf->setValue("zdl.save", "monsters", monstersList->currentIndex());
+	}else{
+		zconf->deleteValue("zdl.save", "monsters");
+	}
+
 	if(diffList->currentIndex() > 0){
 		zconf->setValue("zdl.save", "skill", diffList->currentIndex());
 	}else{
@@ -333,6 +352,24 @@ void ZDLSettingsPane::rebuild(){
 void ZDLSettingsPane::newConfig(){
 	LOGDATAO() << "Loading new config" << endl;
 	ZDLConf *zconf = ZDLConfigurationManager::getActiveConfiguration();
+
+	if(zconf->hasValue("zdl.save", "monsters")){
+		int index = 0;
+		int stat = 0;
+		QString rc = zconf->getValue("zdl.save", "monsters", &stat);
+		if (rc.length() > 0){
+			index = rc.toInt();
+		}
+		if (index >= 0 && index <= 4){
+			monstersList->setCurrentIndex(index);
+		}else{
+			zconf->setValue("zdl.save", "monsters", 0);
+			monstersList->setCurrentIndex(0);
+		}
+	}else{
+		monstersList->setCurrentIndex(0);
+	}
+
 	if(zconf->hasValue("zdl.save", "skill")){
 		int index = 0;
 		int stat = 0;
