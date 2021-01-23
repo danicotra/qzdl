@@ -404,8 +404,7 @@ QString ZDLMainWindow::getArgumentsString(bool native_sep)
 
 	if (zconf->hasValue("zdl.save", "monsters")){
 		bool ok;
-		QString s_monsters=zconf->getValue("zdl.save", "monsters");
-		int i_monsters=s_monsters.toInt(&ok, 10);
+		int i_monsters=zconf->getValue("zdl.save", "monsters").toInt(&ok, 10);
 		if (i_monsters > 0){
 			if (i_monsters == 1){
 				args.append(" -nomonsters");
@@ -421,9 +420,8 @@ QString ZDLMainWindow::getArgumentsString(bool native_sep)
 	}
 
 	if (zconf->hasValue("zdl.save", "skill")){
-		QString skill=zconf->getValue("zdl.save", "skill");
 		args.append(" -skill ");
-		args.append(skill);
+		args.append(zconf->getValue("zdl.save", "skill"));
 	}
 
 	if (zconf->hasValue("zdl.save", "warp")){
@@ -651,13 +649,11 @@ QStringList ZDLMainWindow::getArgumentsList()
 	}
 
 	if (zconf->hasValue("zdl.save", "monsters")){
-		QString monsters=zconf->getValue("zdl.save", "monsters");
-		args<<monsters;
+		args<<zconf->getValue("zdl.save", "monsters");
 	}
 
 	if (zconf->hasValue("zdl.save", "skill")){
-		QString skill=zconf->getValue("zdl.save", "skill");
-		args<<"-skill"<<skill;
+		args<<"-skill"<<zconf->getValue("zdl.save", "skill");
 	}
 
 	if (zconf->hasValue("zdl.save", "warp")){
